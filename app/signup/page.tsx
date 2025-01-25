@@ -1,7 +1,7 @@
 import { Metadata } from "next"
 import { Card } from "@/components/ui/card"
-import LoginForm from "@/app/ui/login-form"
 import PEEPALogo from "../ui/peepa-logo"
+import SignupForm from "../ui/signup-form"
 
 export const metadata: Metadata = {
   title: "Login | Botswana eCSRM",
@@ -27,7 +27,7 @@ export default function LoginPage() {
           
           {/* Right side with login form */}
           <div className="bg-white p-6">
-            <LoginForm />
+            <SignupForm />
           </div>
         </div>
       </Card>
