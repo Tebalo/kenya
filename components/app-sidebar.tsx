@@ -29,44 +29,102 @@ import {
 // This is sample data.
 const data = {
   user: {
-    name: "shadcn",
-    email: "m@example.com",
+    name: "bopaki",
+    email: "bopaki@peepa.com",
     avatar: "/avatars/shadcn.jpg",
   },
   teams: [
     {
-      name: "Acme Inc",
+      name: "Governance",
       logo: GalleryVerticalEnd,
-      plan: "Enterprise",
+      plan: "Performance Monitoring",
     },
     {
-      name: "Acme Corp.",
+      name: "Privatisation",
       logo: AudioWaveform,
-      plan: "Startup",
+      plan: "Restructuring",
     },
     {
-      name: "Evil Corp.",
+      name: "Outsourcing",
       logo: Command,
-      plan: "Free",
+      plan: "Commercialization",
     },
   ],
   navMain: [
     {
-      title: "Playground",
-      url: "#",
+      title: "Performance Monitoring",
+      url: "/dashboard/monitoring",
       icon: SquareTerminal,
       isActive: true,
       items: [
         {
-          title: "History",
-          url: "#",
+          title: "Key Performance Indicators",
+          url: "/dashboard/monitoring/kpis",
         },
         {
-          title: "Starred",
-          url: "#",
+          title: "Compare Entities-(KPI)",
+          url: "/dashboard/monitoring/kpis-compare",
         },
         {
-          title: "Settings",
+          title: "Income Statements",
+          url: "/dashboard/monitoring/income-statements",
+        },
+      ],
+    },
+    {
+      title: "Board",
+      url: "/board",
+      icon: Bot,
+      items: [
+        {
+          title: "Create",
+          url: "/board/create",
+        },
+        {
+          title: "Audit Committee",
+          url: "/board/committee",
+        },
+        {
+          title: "Social & Ethics Committee",
+          url: "/board/committee",
+        },
+        {
+          title: "Risk Committee",
+          url: "/board/committee",
+        },
+        {
+          title: "Renumeration Committee",
+          url: "/board/committee",
+        },
+        {
+          title: "Nomination Committee",
+          url: "/board/committee",
+        },
+        {
+          title: "Gorvernance Committee",
+          url: "/board/committee",
+        },
+        {
+          title: "IT Steering Committee",
+          url: "/board/committee",
+        },
+      ],
+    },
+    {
+      title: "Data Inventory",
+      url: "/data",
+      icon: Bot,
+      items: [
+        {
+          title: "Create",
+          url: "/data/create",
+        },
+        {
+          title: "Inventory",
+          url: "/data/inventory",
+        },
+        {
+          title: "Categories",
           url: "#",
         },
       ],
@@ -91,28 +149,47 @@ const data = {
       ],
     },
     {
-      title: "Documentation",
+      title: "Knowledge Articles",
       url: "#",
       icon: BookOpen,
       items: [
         {
-          title: "Introduction",
+          title: "Create",
           url: "#",
         },
         {
-          title: "Get Started",
+          title: "Articles",
           url: "#",
         },
         {
-          title: "Tutorials",
-          url: "#",
-        },
-        {
-          title: "Changelog",
+          title: "Categories",
           url: "#",
         },
       ],
     },
+    // {
+    //   title: "Documentation",
+    //   url: "#",
+    //   icon: BookOpen,
+    //   items: [
+    //     {
+    //       title: "Introduction",
+    //       url: "#",
+    //     },
+    //     {
+    //       title: "Get Started",
+    //       url: "#",
+    //     },
+    //     {
+    //       title: "Tutorials",
+    //       url: "#",
+    //     },
+    //     {
+    //       title: "Changelog",
+    //       url: "#",
+    //     },
+    //   ],
+    // },
     {
       title: "Settings",
       url: "#",
@@ -126,30 +203,22 @@ const data = {
           title: "Team",
           url: "#",
         },
-        {
-          title: "Billing",
-          url: "#",
-        },
-        {
-          title: "Limits",
-          url: "#",
-        },
       ],
     },
   ],
   projects: [
     {
-      name: "Design Engineering",
+      name: "Privatization",
       url: "#",
       icon: Frame,
     },
     {
-      name: "Sales & Marketing",
+      name: "Outsourcing",
       url: "#",
       icon: PieChart,
     },
     {
-      name: "Travel",
+      name: "Corporate Governance",
       url: "#",
       icon: Map,
     },

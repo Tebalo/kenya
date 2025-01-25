@@ -20,7 +20,7 @@ export default function DashboardLayout({
                         </SidebarTrigger>
                     </div>
                 </header>
-                <main>
+                <main className="p-4 sm:px-6 sm:py-0 bg-muted/40">
                     {children}
                 </main>
             </SidebarInset>
