@@ -43,7 +43,7 @@ export async function authenticate(prevState: string | undefined, formData: Form
       maxAge: 24 * 60 * 60 // 24 hours
     })
 
-    redirect('/home')
+    redirect('/dashboard/monitoring/income-statements')
   } catch (error) {
     throw error
     // return 'An error occurred during authentication'
