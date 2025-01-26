@@ -82,6 +82,17 @@ export default function SignupForm() {
         </div>
 
         <div className="space-y-2">
+          <Label htmlFor="username">Username</Label>
+          <Input
+            id="username"
+            name="username"
+            type="text"
+            placeholder="User name"
+            required
+          />
+        </div>
+
+        <div className="space-y-2">
           <Label htmlFor="password">Password</Label>
           <div className="relative">
             <Input
@@ -108,7 +119,7 @@ export default function SignupForm() {
         <p className="text-sm text-gray-600">
           Already have an account?{" "}
           <Link href="/login" className="text-blue-600 hover:underline">
-            Sign in
+            Register
           </Link>
         </p>
       </CardFooter>

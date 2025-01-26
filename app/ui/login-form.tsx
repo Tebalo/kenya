@@ -3,7 +3,7 @@
 import * as React from "react"
 import Link from "next/link"
 import { useFormStatus } from "react-dom"
-import { AtSymbolIcon, KeyIcon, ExclamationCircleIcon } from "@heroicons/react/24/outline"
+import { KeyIcon, ExclamationCircleIcon } from "@heroicons/react/24/outline"
 import { ArrowRightIcon } from "@heroicons/react/20/solid"
 
 import { Input } from "@/components/ui/input"
@@ -12,6 +12,7 @@ import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
 import { CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { authenticate } from "../login/actions"
+import { UserCheck } from "lucide-react"
 
 export default function LoginForm() {
   const [errorMessage, dispatch] = React.useActionState(authenticate, undefined)
@@ -29,17 +30,17 @@ export default function LoginForm() {
 
       <CardContent className="space-y-4">
         <div className="space-y-2">
-          <Label htmlFor="email">Email</Label>
+          <Label htmlFor="email">Username</Label>
           <div className="relative">
             <Input
               id="email"
-              type="email"
+              type="text"
               name="email"
-              placeholder="Enter your email address"
+              placeholder="Enter your username"
               className="pl-10"
               required
             />
-            <AtSymbolIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" />
+            <UserCheck className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" />
           </div>
         </div>
 

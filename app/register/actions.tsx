@@ -16,21 +16,23 @@ export async function register(prevState: string | undefined, formData: FormData
        'Content-Type': 'application/json',
      },
      body: JSON.stringify({
-        username: formData.get('email'),
+        username: formData.get('username'),
         password: formData.get('password'),
         first_name: formData.get('first_name'),
         last_name: formData.get('last_name'),
         email: formData.get('email'),
         phone: formData.get('phone'),
         address: formData.get('address'),
-        is_staff: false,
-        is_superuser: false
+        is_staff: false
      }),
-   })
+    })
+    const responseData = await response.json();
+    console.log('Response:', responseData);
 
-   if (!response.ok) {
-     return 'Registration failed'
-   }
+    if (response.status==400) {
+        console.error('Error Response:', responseData);
+        return 'Registration failed';
+    }
 
    const data: AuthResponse = await response.json()
    
