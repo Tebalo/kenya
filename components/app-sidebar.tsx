@@ -72,7 +72,7 @@ const data = {
       ],
     },
     {
-      title: "Board",
+      title: "SOE",
       url: "/board",
       icon: Bot,
       items: [
@@ -87,6 +87,10 @@ const data = {
         {
           title: "Applications",
           url: "/dashboard/board/applications",
+        },
+        {
+          title: "State Owned Entities",
+          url: "/dashboard/board/soe",
         },
         // {
         //   title: "Audit Committee",
