@@ -1,16 +1,16 @@
-"use client"
+'use client'
 
 import * as React from "react"
 import {
   AudioWaveform,
-  BookOpen,
+  // BookOpen,
   Bot,
   Command,
   Frame,
   GalleryVerticalEnd,
   Map,
   PieChart,
-  Settings2,
+  // Settings2,
   SquareTerminal,
 } from "lucide-react"
 
@@ -28,11 +28,6 @@ import {
 
 // This is sample data.
 const data = {
-  user: {
-    name: "bopaki",
-    email: "bopaki@peepa.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
   teams: [
     {
       name: "Governance",
@@ -92,55 +87,27 @@ const data = {
           title: "State Owned Entities",
           url: "/dashboard/board/soe",
         },
-        // {
-        //   title: "Audit Committee",
-        //   url: "/board/committee",
-        // },
-        // {
-        //   title: "Social & Ethics Committee",
-        //   url: "/board/committee",
-        // },
-        // {
-        //   title: "Risk Committee",
-        //   url: "/board/committee",
-        // },
-        // {
-        //   title: "Renumeration Committee",
-        //   url: "/board/committee",
-        // },
-        // {
-        //   title: "Nomination Committee",
-        //   url: "/board/committee",
-        // },
-        // {
-        //   title: "Gorvernance Committee",
-        //   url: "/board/committee",
-        // },
-        // {
-        //   title: "IT Steering Committee",
-        //   url: "/board/committee",
-        // },
       ],
     },
-    {
-      title: "Data Inventory",
-      url: "/data",
-      icon: Bot,
-      items: [
-        {
-          title: "Create",
-          url: "/data/create",
-        },
-        {
-          title: "Inventory",
-          url: "/data/inventory",
-        },
-        {
-          title: "Categories",
-          url: "#",
-        },
-      ],
-    },
+    // {
+    //   title: "Data Inventory",
+    //   url: "/data",
+    //   icon: Bot,
+    //   items: [
+    //     {
+    //       title: "Create",
+    //       url: "/data/create",
+    //     },
+    //     {
+    //       title: "Inventory",
+    //       url: "/data/inventory",
+    //     },
+    //     {
+    //       title: "Categories",
+    //       url: "#",
+    //     },
+    //   ],
+    // },
     {
       title: "User Management",
       url: "/dashboard/user-management",
@@ -156,63 +123,40 @@ const data = {
         },
       ],
     },
-    {
-      title: "Knowledge Articles",
-      url: "#",
-      icon: BookOpen,
-      items: [
-        {
-          title: "Create",
-          url: "#",
-        },
-        {
-          title: "Articles",
-          url: "#",
-        },
-        {
-          title: "Categories",
-          url: "#",
-        },
-      ],
-    },
     // {
-    //   title: "Documentation",
+    //   title: "Knowledge Articles",
     //   url: "#",
     //   icon: BookOpen,
     //   items: [
     //     {
-    //       title: "Introduction",
+    //       title: "Create",
     //       url: "#",
     //     },
     //     {
-    //       title: "Get Started",
+    //       title: "Articles",
     //       url: "#",
     //     },
     //     {
-    //       title: "Tutorials",
-    //       url: "#",
-    //     },
-    //     {
-    //       title: "Changelog",
+    //       title: "Categories",
     //       url: "#",
     //     },
     //   ],
     // },
-    {
-      title: "Settings",
-      url: "#",
-      icon: Settings2,
-      items: [
-        {
-          title: "General",
-          url: "#",
-        },
-        {
-          title: "Team",
-          url: "#",
-        },
-      ],
-    },
+    // {
+    //   title: "Settings",
+    //   url: "#",
+    //   icon: Settings2,
+    //   items: [
+    //     {
+    //       title: "General",
+    //       url: "#",
+    //     },
+    //     {
+    //       title: "Team",
+    //       url: "#",
+    //     },
+    //   ],
+    // },
   ],
   projects: [
     {
@@ -244,7 +188,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavProjects projects={data.projects} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
