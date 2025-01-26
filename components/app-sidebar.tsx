@@ -139,16 +139,16 @@ const data = {
     },
     {
       title: "User Management",
-      url: "#",
+      url: "/dashboard/user-management",
       icon: Bot,
       items: [
         {
           title: "People",
-          url: "#",
+          url: "/dashboard/user-management/people",
         },
         {
           title: "Roles",
-          url: "#",
+          url: "/dashboard/user-management/roles",
         },
       ],
     },
