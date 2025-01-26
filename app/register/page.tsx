@@ -1,7 +1,7 @@
 import { Metadata } from "next"
 import { Card } from "@/components/ui/card"
-import LoginForm from "@/app/ui/login-form"
 import PEEPALogo from "../ui/peepa-logo"
+import SignupForm from "../ui/signup-form"
 import { Navbar } from "@/components/nav-bar"
 import { Footer } from "@/components/footer"
 
@@ -15,6 +15,7 @@ export default function LoginPage() {
     <>
       <Navbar />
       <main className="container flex items-center justify-center min-h-screen py-8">
+        
         <Card className="w-full max-w-6xl p-0 overflow-hidden">
           <div className="grid lg:grid-cols-2 gap-0">
             {/* Left side with logo */}
@@ -31,7 +32,7 @@ export default function LoginPage() {
             
             {/* Right side with login form */}
             <div className="bg-white p-6">
-              <LoginForm />
+              <SignupForm />
             </div>
           </div>
         </Card>
