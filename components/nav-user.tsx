@@ -1,18 +1,17 @@
-"use client"
+'use client'
 
+import React, { useState, useEffect } from 'react'
 import {
   BadgeCheck,
   Bell,
   ChevronsUpDown,
-  CreditCard,
   LogOut,
-  Sparkles,
 } from "lucide-react"
 
 import {
   Avatar,
   AvatarFallback,
-  AvatarImage,
+  // AvatarImage,
 } from "@/components/ui/avatar"
 import {
   DropdownMenu,
@@ -29,17 +28,44 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar"
+import { updateCurrentRole } from '@/app/login/session-actions'
 
-export function NavUser({
-  user,
-}: {
-  user: {
-    name: string
-    email: string
-    avatar: string
-  }
-}) {
+export function NavUser() {
+  const [userProfile, setUserProfile] = useState<{
+    profile: {
+      username: string
+      email: string
+    }
+    roles: string[]
+    currentRole: string
+  } | null>(null)
   const { isMobile } = useSidebar()
+
+  useEffect(() => {
+    async function fetchUserProfile() {
+      try {
+        const response = await fetch('/api/user-profile')
+        const data = await response.json()
+        setUserProfile(data)
+      } catch (error) {
+        console.error('Error fetching user profile:', error)
+      }
+    }
+    fetchUserProfile()
+  }, [])
+
+  const handleRoleChange = async (role: string) => {
+    try {
+      const updatedProfile = await updateCurrentRole(role)
+      if (updatedProfile) {
+        setUserProfile(updatedProfile)
+      }
+    } catch (error) {
+      console.error('Error updating current role:', error)
+    }
+  }
+
+  if (!userProfile) return null
 
   return (
     <SidebarMenu>
@@ -51,12 +77,13 @@ export function NavUser({
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
               <Avatar className="h-8 w-8 rounded-lg">
-                <AvatarImage src={user.avatar} alt={user.name} />
-                <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                <AvatarFallback className="rounded-lg">
+                  {userProfile.profile.username.charAt(0).toUpperCase()}
+                </AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-semibold">{user.name}</span>
-                <span className="truncate text-xs">{user.email}</span>
+                <span className="truncate font-semibold">{userProfile.profile.username}</span>
+                <span className="truncate text-xs">{userProfile.currentRole || 'No Role'}</span>
               </div>
               <ChevronsUpDown className="ml-auto size-4" />
             </SidebarMenuButton>
@@ -70,31 +97,39 @@ export function NavUser({
             <DropdownMenuLabel className="p-0 font-normal">
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage src={user.avatar} alt={user.name} />
-                  <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                  <AvatarFallback className="rounded-lg">
+                    {userProfile.profile.username.charAt(0).toUpperCase()}
+                  </AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-semibold">{user.name}</span>
-                  <span className="truncate text-xs">{user.email}</span>
+                  <span className="truncate font-semibold">{userProfile.profile.username}</span>
+                  <span className="truncate text-xs">{userProfile.profile.email}</span>
                 </div>
               </div>
             </DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <Sparkles />
-                Upgrade to Pro
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
+            
+            {userProfile.roles.length > 1 && (
+              <>
+                <DropdownMenuSeparator />
+                <DropdownMenuGroup>
+                  {userProfile.roles.map((role) => (
+                    <DropdownMenuItem 
+                      key={role} 
+                      onSelect={() => handleRoleChange(role)}
+                      className={userProfile.currentRole === role ? 'bg-accent' : ''}
+                    >
+                      Switch to {role} Role
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuGroup>
+              </>
+            )}
+            
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem>
                 <BadgeCheck />
                 Account
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <CreditCard />
-                Billing
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <Bell />
