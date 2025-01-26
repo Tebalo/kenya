@@ -77,37 +77,45 @@ const data = {
       icon: Bot,
       items: [
         {
-          title: "Create",
-          url: "/board/create",
+          title: "Vacancies",
+          url: "/dashboard/board/vacancies",
         },
         {
-          title: "Audit Committee",
-          url: "/board/committee",
+          title: "My Applications",
+          url: "/dashboard/board/my-applications",
         },
         {
-          title: "Social & Ethics Committee",
-          url: "/board/committee",
+          title: "Applications",
+          url: "/dashboard/board/applications",
         },
-        {
-          title: "Risk Committee",
-          url: "/board/committee",
-        },
-        {
-          title: "Renumeration Committee",
-          url: "/board/committee",
-        },
-        {
-          title: "Nomination Committee",
-          url: "/board/committee",
-        },
-        {
-          title: "Gorvernance Committee",
-          url: "/board/committee",
-        },
-        {
-          title: "IT Steering Committee",
-          url: "/board/committee",
-        },
+        // {
+        //   title: "Audit Committee",
+        //   url: "/board/committee",
+        // },
+        // {
+        //   title: "Social & Ethics Committee",
+        //   url: "/board/committee",
+        // },
+        // {
+        //   title: "Risk Committee",
+        //   url: "/board/committee",
+        // },
+        // {
+        //   title: "Renumeration Committee",
+        //   url: "/board/committee",
+        // },
+        // {
+        //   title: "Nomination Committee",
+        //   url: "/board/committee",
+        // },
+        // {
+        //   title: "Gorvernance Committee",
+        //   url: "/board/committee",
+        // },
+        // {
+        //   title: "IT Steering Committee",
+        //   url: "/board/committee",
+        // },
       ],
     },
     {
@@ -130,20 +138,16 @@ const data = {
       ],
     },
     {
-      title: "Models",
+      title: "User Management",
       url: "#",
       icon: Bot,
       items: [
         {
-          title: "Genesis",
+          title: "People",
           url: "#",
         },
         {
-          title: "Explorer",
-          url: "#",
-        },
-        {
-          title: "Quantum",
+          title: "Roles",
           url: "#",
         },
       ],
