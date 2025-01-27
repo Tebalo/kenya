@@ -18,7 +18,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
-import { Eye } from "lucide-react";
+import { AlertCircle, Eye } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Building2, Users, GraduationCap, Contact, CalendarClock } from 'lucide-react';
 import { Label } from "@/components/ui/label";
@@ -115,6 +115,28 @@ export default function VacanciesPage() {
     }
   };
 
+  const [userProfile, setUserProfile] = useState<{
+    profile: {
+      username: string
+      email: string
+    }
+    roles: string[]
+    currentRole: string
+  } | null>(null)
+  
+  useEffect(() => {
+  async function fetchUserProfile() {
+    try {
+        const response = await fetch('/api/user-profile')
+        const data = await response.json()
+        setUserProfile(data)
+      } catch (error) {
+        console.error('Error fetching user profile:', error)
+      }
+    }
+    fetchUserProfile()
+  }, [])
+
   return (
     <div className="p-6 space-y-6">
       <div className="flex justify-between items-center">
@@ -123,73 +145,80 @@ export default function VacanciesPage() {
           <p className="text-muted-foreground">View new board applications</p>
         </div>
       </div>
-
-      <Card>
-        <CardContent className="p-0">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Applicant Name</TableHead>
-                <TableHead>Email</TableHead>
-                <TableHead>Vacancy</TableHead>
-                <TableHead>Organization</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Applied On</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-        {loading ? (
-          <TableRow>
-            <TableCell colSpan={7} className="text-center">Loading...</TableCell>
-          </TableRow>
-        ) : boardApplications.length === 0 ? (
-          <TableRow>
-            <TableCell colSpan={7} className="text-center">No applications found</TableCell>
-          </TableRow>
+      {userProfile?.currentRole === 'customer' || userProfile?.currentRole === '' ? (
+        <Card className="p-6 text-center">
+          <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
+          <h2 className="text-xl font-semibold mb-2">Access Denied</h2>
+          <p className="text-gray-600">You don&#39;t have permission to view this page</p>
+        </Card>
         ) : (
-          boardApplications.map((application) => (
-            <TableRow key={application.id}>
-              <TableCell>{application.applicant_name}</TableCell>
-              <TableCell>{application.email}</TableCell>
-              <TableCell>{application.vacancy}</TableCell>
-              <TableCell>{application.organization}</TableCell>
-              <TableCell>
-                <Badge variant="outline">
-                  {application.reg_status.toUpperCase()}
-                </Badge>
-              </TableCell>
-              <TableCell>{format(new Date(application.created_at), 'MMM d, yyyy')}</TableCell>
-              <TableCell className="text-right">
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <Button 
-                      variant="ghost" 
-                      size="sm"
-                      onClick={() => fetchApplicationDetails(application.id)}
-                    >
-                      <Eye className="h-4 w-4" />
-                    </Button>
-                  </DialogTrigger>
-                  {selectedApplication && (
-                    <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-                      <DialogHeader>
-                        <DialogTitle>
-                          Application Details - {selectedApplication.application_number}
-                        </DialogTitle>
-                      </DialogHeader>
-                      <ApplicationDetails application={selectedApplication} />
-                    </DialogContent>
-                  )}
-                </Dialog>
-              </TableCell>
-            </TableRow>
-          ))
-        )}
-      </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
+        <Card>
+          <CardContent className="p-0">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Applicant Name</TableHead>
+                  <TableHead>Email</TableHead>
+                  <TableHead>Vacancy</TableHead>
+                  <TableHead>Organization</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Applied On</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {loading ? (
+                  <TableRow>
+                    <TableCell colSpan={7} className="text-center">Loading...</TableCell>
+                  </TableRow>
+                ) : boardApplications.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={7} className="text-center">No applications found</TableCell>
+                  </TableRow>
+                ) : (
+                  boardApplications.map((application) => (
+                    <TableRow key={application.id}>
+                      <TableCell>{application.applicant_name}</TableCell>
+                      <TableCell>{application.email}</TableCell>
+                      <TableCell>{application.vacancy}</TableCell>
+                      <TableCell>{application.organization}</TableCell>
+                      <TableCell>
+                        <Badge variant="outline">
+                          {application.reg_status.toUpperCase()}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>{format(new Date(application.created_at), 'MMM d, yyyy')}</TableCell>
+                      <TableCell className="text-right">
+                        <Dialog>
+                          <DialogTrigger asChild>
+                            <Button 
+                              variant="ghost" 
+                              size="sm"
+                              onClick={() => fetchApplicationDetails(application.id)}
+                            >
+                              <Eye className="h-4 w-4" />
+                            </Button>
+                          </DialogTrigger>
+                          {selectedApplication && (
+                            <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+                              <DialogHeader>
+                                <DialogTitle>
+                                  Application Details - {selectedApplication.application_number}
+                                </DialogTitle>
+                              </DialogHeader>
+                              <ApplicationDetails application={selectedApplication} />
+                            </DialogContent>
+                          )}
+                        </Dialog>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }
