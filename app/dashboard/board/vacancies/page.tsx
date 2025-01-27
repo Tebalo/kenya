@@ -58,23 +58,45 @@ interface Vacancy {
 }
 
 export default function VacanciesPage() {
-const [vacancies, setVacancies] = useState<Vacancy[]>([]);
-const [loading, setLoading] = useState(true);
+  const [vacancies, setVacancies] = useState<Vacancy[]>([]);
+  const [loading, setLoading] = useState(true);
 
-useEffect(() => {
-    async function fetchData() {
-      try {
-        const data = await getVacancies();
-        console.log('Fetched data:', data); // Debug log
-        setVacancies(data);
-      } catch (error) {
-        console.error('Error fetching vacancies:', error);
-      } finally {
-        setLoading(false);
+  useEffect(() => {
+      async function fetchData() {
+        try {
+          const data = await getVacancies();
+          console.log('Fetched data:', data); // Debug log
+          setVacancies(data);
+        } catch (error) {
+          console.error('Error fetching vacancies:', error);
+        } finally {
+          setLoading(false);
+        }
       }
-    }
-    fetchData();
-   }, []);
+      fetchData();
+  }, []);
+
+  const [userProfile, setUserProfile] = useState<{
+      profile: {
+          username: string
+          email: string
+      }
+      roles: string[]
+      currentRole: string
+      } | null>(null)
+  
+      useEffect(() => {
+      async function fetchUserProfile() {
+          try {
+          const response = await fetch('/api/user-profile')
+          const data = await response.json()
+          setUserProfile(data)
+          } catch (error) {
+          console.error('Error fetching user profile:', error)
+          }
+      }
+      fetchUserProfile()
+  }, [])
 
 return (
     <div className="p-6 space-y-6">
@@ -83,7 +105,9 @@ return (
         <h1 className="text-3xl font-bold tracking-tight">Board Vacancies</h1>
         <p className="text-muted-foreground">View available board positions</p>
         </div>
-        <VacancyForm />
+        {(!userProfile?.currentRole || userProfile?.currentRole !== 'customer') && (
+          <VacancyForm />
+        )}
     </div>
 
     <Card>

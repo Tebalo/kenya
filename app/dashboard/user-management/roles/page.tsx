@@ -113,6 +113,29 @@ export default function RolesPage() {
         }
     };
 
+        const [userProfile, setUserProfile] = useState<{
+            profile: {
+                username: string
+                email: string
+            }
+            roles: string[]
+            currentRole: string
+            } | null>(null)
+        
+            useEffect(() => {
+            async function fetchUserProfile() {
+                try {
+                const response = await fetch('/api/user-profile')
+                const data = await response.json()
+                setUserProfile(data)
+                } catch (error) {
+                console.error('Error fetching user profile:', error)
+                }
+            }
+            fetchUserProfile()
+        }, [])
+    
+
     return (
         <div className="p-6 space-y-6">
             <div className="flex justify-between items-center">
@@ -122,9 +145,10 @@ export default function RolesPage() {
                 </div>
                 <Dialog>
                     <DialogTrigger asChild>
+                    {(!userProfile?.currentRole || userProfile?.currentRole !== 'customer') && (
                         <Button>
                             <Plus className="mr-2 h-4 w-4" /> Create Role
-                        </Button>
+                        </Button>)}
                     </DialogTrigger>
                     <DialogContent>
                         <DialogHeader>
@@ -136,7 +160,7 @@ export default function RolesPage() {
                                 value={newRoleName}
                                 onChange={(e) => setNewRoleName(e.target.value)}
                                 required
-                            />
+                            />                       
                             <Button type="submit" className="w-full">Create</Button>
                         </form>
                     </DialogContent>
@@ -168,13 +192,14 @@ export default function RolesPage() {
                                         <TableCell>{role.id}</TableCell>
                                         <TableCell className="font-medium">{role.name}</TableCell>
                                         <TableCell className="text-right">
+                                        {(!userProfile?.currentRole || userProfile?.currentRole !== 'customer') && (
                                             <Button 
                                                 variant="ghost" 
                                                 size="sm" 
                                                 onClick={() => handleDeleteRole(role.id)}
                                             >
                                                 <Trash2 className="h-4 w-4 text-destructive" />
-                                            </Button>
+                                            </Button>)}
                                         </TableCell>
                                     </TableRow>
                                 ))

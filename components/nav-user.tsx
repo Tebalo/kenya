@@ -29,8 +29,12 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar"
 import { updateCurrentRole } from '@/app/login/session-actions'
+import { useRouter } from 'next/navigation'
 
 export function NavUser() {
+
+  const router = useRouter();
+
   const [userProfile, setUserProfile] = useState<{
     profile: {
       username: string
@@ -39,6 +43,7 @@ export function NavUser() {
     roles: string[]
     currentRole: string
   } | null>(null)
+
   const { isMobile } = useSidebar()
 
   useEffect(() => {
@@ -59,6 +64,7 @@ export function NavUser() {
       const updatedProfile = await updateCurrentRole(role)
       if (updatedProfile) {
         setUserProfile(updatedProfile)
+        window.location.reload()
       }
     } catch (error) {
       console.error('Error updating current role:', error)
@@ -137,7 +143,7 @@ export function NavUser() {
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem onSelect={() => router.push('/login')}>
               <LogOut />
               Log out
             </DropdownMenuItem>

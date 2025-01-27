@@ -8,7 +8,7 @@ import {
   Command,
   Frame,
   GalleryVerticalEnd,
-  Map,
+  // Map,
   PieChart,
   // Settings2,
   SquareTerminal,
@@ -161,19 +161,19 @@ const data = {
   projects: [
     {
       name: "Privatization",
-      url: "#",
+      url: "/dashboard/projects/privatization",
       icon: Frame,
     },
     {
       name: "Outsourcing",
-      url: "#",
+      url: "/dashboard/projects/outsourcing",
       icon: PieChart,
     },
-    {
-      name: "Corporate Governance",
-      url: "#",
-      icon: Map,
-    },
+    // {
+    //   name: "Corporate Governance",
+    //   url: "#",
+    //   icon: Map,
+    // },
   ],
 }
 

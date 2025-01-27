@@ -53,6 +53,28 @@ export default function OrganizationsPage() {
         fetchOrganizations();
     }, []);
 
+    const [userProfile, setUserProfile] = useState<{
+        profile: {
+            username: string
+            email: string
+        }
+        roles: string[]
+        currentRole: string
+        } | null>(null)
+    
+        useEffect(() => {
+        async function fetchUserProfile() {
+            try {
+            const response = await fetch('/api/user-profile')
+            const data = await response.json()
+            setUserProfile(data)
+            } catch (error) {
+            console.error('Error fetching user profile:', error)
+            }
+        }
+        fetchUserProfile()
+    }, [])
+
     return (
         <div className="p-6 space-y-6">
             <div className="flex justify-between items-center">
@@ -60,9 +82,10 @@ export default function OrganizationsPage() {
                     <h1 className="text-3xl font-bold tracking-tight">Organizations</h1>
                     <p className="text-muted-foreground">Manage and view organizations</p>
                 </div>
+                {(!userProfile?.currentRole || userProfile?.currentRole !== 'customer') && (
                 <CreateOrganizationDialog 
                     onOrganizationCreated={(newOrg) => setOrganizations([...organizations, newOrg])}
-                />
+                />)}
             </div>
 
             <Card>
@@ -198,7 +221,7 @@ function CreateOrganizationDialog({
                             onChange={(e) => setBoardSize(e.target.value)}
                             required 
                         />
-                    </div>
+                    </div>                   
                     <Button type="submit" className="w-full">Create Organization</Button>
                 </form>
             </DialogContent>

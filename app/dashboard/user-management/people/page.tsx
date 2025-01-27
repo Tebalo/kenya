@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Eye, UserPlus } from "lucide-react";
+import { AlertCircle, Eye, UserPlus } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { User, Mail, Phone, Tag, UserCircle, Contact, Home } from 'lucide-react';
@@ -111,13 +111,41 @@ export default function UsersPage() {
         }
     };
 
+    const [userProfile, setUserProfile] = useState<{
+    profile: {
+        username: string
+        email: string
+    }
+    roles: string[]
+    currentRole: string
+    } | null>(null)
+    
+    useEffect(() => {
+    async function fetchUserProfile() {
+    try {
+        const response = await fetch('/api/user-profile')
+        const data = await response.json()
+        setUserProfile(data)
+        } catch (error) {
+        console.error('Error fetching user profile:', error)
+        }
+    }
+    fetchUserProfile()
+    }, [])
+
     return (
         <div className="p-6 space-y-6">
             <div>
                 <h1 className="text-3xl font-bold tracking-tight">User Management</h1>
                 <p className="text-muted-foreground">View and manage user accounts</p>
             </div>
-
+        {userProfile?.currentRole === 'customer' || userProfile?.currentRole === '' ? (
+            <Card className="p-6 text-center">
+            <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
+            <h2 className="text-xl font-semibold mb-2">Access Denied</h2>
+            <p className="text-gray-600">You don&#39;t have permission to view this page</p>
+            </Card>
+        ) : (
             <Card>
                 <CardContent className="p-0">
                     <Table>
@@ -189,6 +217,7 @@ export default function UsersPage() {
                     </Table>
                 </CardContent>
             </Card>
+        )}
         </div>
     );
 }
