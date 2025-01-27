@@ -18,7 +18,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
-import { AlertCircle, Eye } from "lucide-react";
+import { Eye } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Building2, Users, GraduationCap, Contact, CalendarClock } from 'lucide-react';
 import { Label } from "@/components/ui/label";
@@ -28,6 +28,7 @@ interface BoardApplication {
     applicant_name: string;
     email: string;
     vacancy: string;
+    application_number: string;
     organization: string;
     reg_status: string;
     created_at: string;
@@ -76,16 +77,42 @@ export default function VacanciesPage() {
   const [selectedApplication, setSelectedApplication] = useState<ApplicationDetails | null>(null);
   const [loading, setLoading] = useState(true);
 
+  const [userProfile, setUserProfile] = useState<{
+    profile: { username: string; email: string };
+    roles: string[];
+    currentRole: string;
+  } | null>(null);
+ 
+  useEffect(() => {
+    fetchBoardApplications();
+    fetchUserProfile();
+  }, []);
+ 
+  async function fetchUserProfile() {
+    try {
+      const response = await fetch('/api/user-profile');
+      const data = await response.json();
+      setUserProfile(data);
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  }
+
   useEffect(() => {
     fetchBoardApplications();
   }, []);
 
   async function fetchBoardApplications() {
     try {
-      const response = await fetch('http://172.236.179.13:8080/api/governance/board-application-list/?reg_status=new&count=10', {
-        headers: {
-          'Content-Type': 'application/json',
-        },
+      let status = 'new';
+      if (userProfile?.currentRole === 'manager') {
+        status = 'OFFICER_APPROVED';
+      } else if (userProfile?.currentRole === 'director') {
+        status = 'MANAGER_APPROVED';
+      }
+ 
+      const response = await fetch(`http://172.236.179.13:8080/api/governance/board-application-list/?reg_status=${status}&count=10`, {
+        headers: { 'Content-Type': 'application/json' },
       });
       const data = await response.json();
       if (data.status === 'success') {
@@ -98,13 +125,10 @@ export default function VacanciesPage() {
     }
   }
 
-  const fetchApplicationDetails = async (id: number) => {
+  const fetchApplicationDetails = async (application_number: string) => {
     try {
-      const applicationNumber = `APL-01-25-${id.toString().padStart(5, '0')}`;
-      const response = await fetch(`http://172.236.179.13:8080/api/governance/applications/${applicationNumber}/`, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
+      const response = await fetch(`http://172.236.179.13:8080/api/governance/applications/${application_number}/`, {
+        headers: { 'Content-Type': 'application/json' },
       });
       const data = await response.json();
       if (data.status === 'success') {
@@ -115,28 +139,6 @@ export default function VacanciesPage() {
     }
   };
 
-  const [userProfile, setUserProfile] = useState<{
-    profile: {
-      username: string
-      email: string
-    }
-    roles: string[]
-    currentRole: string
-  } | null>(null)
-  
-  useEffect(() => {
-  async function fetchUserProfile() {
-    try {
-        const response = await fetch('/api/user-profile')
-        const data = await response.json()
-        setUserProfile(data)
-      } catch (error) {
-        console.error('Error fetching user profile:', error)
-      }
-    }
-    fetchUserProfile()
-  }, [])
-
   return (
     <div className="p-6 space-y-6">
       <div className="flex justify-between items-center">
@@ -145,85 +147,135 @@ export default function VacanciesPage() {
           <p className="text-muted-foreground">View new board applications</p>
         </div>
       </div>
-      {userProfile?.currentRole === 'customer' || userProfile?.currentRole === '' ? (
-        <Card className="p-6 text-center">
-          <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
-          <h2 className="text-xl font-semibold mb-2">Access Denied</h2>
-          <p className="text-gray-600">You don&#39;t have permission to view this page</p>
-        </Card>
+
+      <Card>
+        <CardContent className="p-0">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Applicant Name</TableHead>
+                <TableHead>Email</TableHead>
+                <TableHead>Vacancy</TableHead>
+                <TableHead>Organization</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead>Applied On</TableHead>
+                <TableHead className="text-right">Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+        {loading ? (
+          <TableRow>
+            <TableCell colSpan={7} className="text-center">Loading...</TableCell>
+          </TableRow>
+        ) : boardApplications.length === 0 ? (
+          <TableRow>
+            <TableCell colSpan={7} className="text-center">No applications found</TableCell>
+          </TableRow>
         ) : (
-        <Card>
-          <CardContent className="p-0">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Applicant Name</TableHead>
-                  <TableHead>Email</TableHead>
-                  <TableHead>Vacancy</TableHead>
-                  <TableHead>Organization</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Applied On</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {loading ? (
-                  <TableRow>
-                    <TableCell colSpan={7} className="text-center">Loading...</TableCell>
-                  </TableRow>
-                ) : boardApplications.length === 0 ? (
-                  <TableRow>
-                    <TableCell colSpan={7} className="text-center">No applications found</TableCell>
-                  </TableRow>
-                ) : (
-                  boardApplications.map((application) => (
-                    <TableRow key={application.id}>
-                      <TableCell>{application.applicant_name}</TableCell>
-                      <TableCell>{application.email}</TableCell>
-                      <TableCell>{application.vacancy}</TableCell>
-                      <TableCell>{application.organization}</TableCell>
-                      <TableCell>
-                        <Badge variant="outline">
-                          {application.reg_status.toUpperCase()}
-                        </Badge>
-                      </TableCell>
-                      <TableCell>{format(new Date(application.created_at), 'MMM d, yyyy')}</TableCell>
-                      <TableCell className="text-right">
-                        <Dialog>
-                          <DialogTrigger asChild>
-                            <Button 
-                              variant="ghost" 
-                              size="sm"
-                              onClick={() => fetchApplicationDetails(application.id)}
-                            >
-                              <Eye className="h-4 w-4" />
-                            </Button>
-                          </DialogTrigger>
-                          {selectedApplication && (
-                            <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-                              <DialogHeader>
-                                <DialogTitle>
-                                  Application Details - {selectedApplication.application_number}
-                                </DialogTitle>
-                              </DialogHeader>
-                              <ApplicationDetails application={selectedApplication} />
-                            </DialogContent>
-                          )}
-                        </Dialog>
-                      </TableCell>
-                    </TableRow>
-                  ))
-                )}
-              </TableBody>
-            </Table>
-          </CardContent>
-        </Card>
-      )}
+          boardApplications.map((application) => (
+            <TableRow key={application.id}>
+              <TableCell>{application.applicant_name}</TableCell>
+              <TableCell>{application.email}</TableCell>
+              <TableCell>{application.vacancy}</TableCell>
+              <TableCell>{application.organization}</TableCell>
+              <TableCell>
+                <Badge variant="outline">
+                  {application.reg_status.toUpperCase()}
+                </Badge>
+              </TableCell>
+              <TableCell>{format(new Date(application.created_at), 'MMM d, yyyy')}</TableCell>
+              <TableCell className="text-right">
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button 
+                      variant="ghost" 
+                      size="sm"
+                      onClick={() => fetchApplicationDetails(application.application_number)}
+                    >
+                      <Eye className="h-4 w-4" />
+                    </Button>
+                  </DialogTrigger>
+                  {selectedApplication && (
+                    <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+                      <DialogHeader>
+                        <DialogTitle>
+                          Application Details - {selectedApplication.application_number}
+                        </DialogTitle>
+                      </DialogHeader>
+                      <ApplicationDetails application={selectedApplication} />
+                    </DialogContent>
+                  )}
+                </Dialog>
+              </TableCell>
+            </TableRow>
+          ))
+        )}
+      </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
     </div>
   );
 }
 
 function ApplicationDetails({ application }: { application: ApplicationDetails }) {
+  const [userProfile, setUserProfile] = useState<{
+    profile: { username: string; email: string };
+    roles: string[];
+    currentRole: string;
+  } | null>(null);
+ 
+  useEffect(() => {
+    fetchUserProfile();
+  }, []);
+ 
+  async function fetchUserProfile() {
+    try {
+      const response = await fetch('/api/user-profile');
+      const data = await response.json();
+      setUserProfile(data);
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  }
+ 
+  const updateApplicationStatus = async (applicationNumber: string, newStatus: string) => {
+    try {
+      const response = await fetch(
+        `http://172.236.179.13:8080/api/governance/update_status/${applicationNumber}/?reg_status=${newStatus}`,
+        {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+        }
+      );
+      
+      if (response.ok) {
+        window.location.reload();
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+ 
+  const getNextStatus = (currentRole: string) => {
+    switch(currentRole) {
+      case 'officer': return 'OFFICER_APPROVED';
+      case 'manager': return 'MANAGER_APPROVED';
+      case 'director': return 'APPROVED';
+      default: return 'new';
+    }
+  };
+ 
+  const getRejectionStatus = (currentRole: string) => {
+    switch(currentRole) {
+      case 'officer': return 'OFFICER_REJECTED';
+      case 'manager': return 'MANAGER_REJECTED';
+      case 'director': return 'REJECTED';
+      default: return 'REJECTED';
+    }
+  };
+  
+
   return (
     <div className="grid gap-6">
       {/* Personal Information */}
@@ -372,11 +424,28 @@ function ApplicationDetails({ application }: { application: ApplicationDetails }
         </CardContent>
       </Card>
 
-      {/* Actions */}
-      <div className="flex justify-end gap-4">
-        <Button variant="outline">Reject Application</Button>
-        <Button>Approve Application</Button>
-      </div>
+     {/* Actions */}
+     <div className="flex justify-end gap-4">
+       <Button 
+         variant="outline"
+         onClick={() => userProfile?.currentRole && 
+           updateApplicationStatus(
+             application.application_number,
+             getRejectionStatus(userProfile.currentRole)
+           )}
+       >
+         Reject Application
+       </Button>
+       <Button
+         onClick={() => userProfile?.currentRole && 
+           updateApplicationStatus(
+             application.application_number,
+             getNextStatus(userProfile.currentRole)
+           )}
+       >
+         Approve Application
+       </Button>
+     </div>
     </div>
   );
 }
