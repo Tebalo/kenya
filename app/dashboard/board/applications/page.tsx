@@ -76,18 +76,20 @@ export default function VacanciesPage() {
   const [boardApplications, setBoardApplications] = useState<BoardApplication[]>([]);
   const [selectedApplication, setSelectedApplication] = useState<ApplicationDetails | null>(null);
   const [loading, setLoading] = useState(true);
-
   const [userProfile, setUserProfile] = useState<{
     profile: { username: string; email: string };
     roles: string[];
     currentRole: string;
   } | null>(null);
- 
+
   useEffect(() => {
-    fetchBoardApplications();
-    fetchUserProfile();
+    async function fetchData() {
+      await fetchUserProfile();
+      await fetchBoardApplications();
+    }
+    fetchData();
   }, []);
- 
+
   async function fetchUserProfile() {
     try {
       const response = await fetch('/api/user-profile');
@@ -98,19 +100,15 @@ export default function VacanciesPage() {
     }
   }
 
-  useEffect(() => {
-    fetchBoardApplications();
-  }, []);
-
   async function fetchBoardApplications() {
     try {
       let status = 'new';
-      if (userProfile?.currentRole === 'manager') {
+      if (userProfile?.currentRole === 'Manager') {
         status = 'OFFICER_APPROVED';
-      } else if (userProfile?.currentRole === 'director') {
+      } else if (userProfile?.currentRole === 'Director') {
         status = 'MANAGER_APPROVED';
       }
- 
+
       const response = await fetch(`http://172.236.179.13:8080/api/governance/board-application-list/?reg_status=${status}&count=10`, {
         headers: { 'Content-Type': 'application/json' },
       });
@@ -124,6 +122,12 @@ export default function VacanciesPage() {
       setLoading(false);
     }
   }
+
+  useEffect(() => {
+    if (userProfile) {
+      fetchBoardApplications();
+    }
+  }, [userProfile]);
 
   const fetchApplicationDetails = async (application_number: string) => {
     try {
@@ -260,8 +264,8 @@ function ApplicationDetails({ application }: { application: ApplicationDetails }
   const getNextStatus = (currentRole: string) => {
     switch(currentRole) {
       case 'officer': return 'OFFICER_APPROVED';
-      case 'manager': return 'MANAGER_APPROVED';
-      case 'director': return 'APPROVED';
+      case 'Manager': return 'MANAGER_APPROVED';
+      case 'Director': return 'APPROVED';
       default: return 'new';
     }
   };
@@ -269,8 +273,8 @@ function ApplicationDetails({ application }: { application: ApplicationDetails }
   const getRejectionStatus = (currentRole: string) => {
     switch(currentRole) {
       case 'officer': return 'OFFICER_REJECTED';
-      case 'manager': return 'MANAGER_REJECTED';
-      case 'director': return 'REJECTED';
+      case 'Manager': return 'MANAGER_REJECTED';
+      case 'Director': return 'REJECTED';
       default: return 'REJECTED';
     }
   };
