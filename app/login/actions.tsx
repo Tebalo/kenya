@@ -62,7 +62,6 @@ export async function authenticate1(prevState: string | undefined, formData: For
   }
 }
 
-// Mock OTP storage - in production this would be in a database
 const validOTPs = new Set(['123456', '234567', '345678'])
 let tempAuthData: AuthResponse | null = null
 
