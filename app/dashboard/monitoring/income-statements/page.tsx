@@ -80,14 +80,14 @@ function StatementDetails({ statement }: { statement: IncomeStatement }) {
                 <TableRow key={item.id}>
                   <TableCell>{item.description}</TableCell>
                   <TableCell className="text-right">
-                    {item.amount.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}
+                    {item.amount.toLocaleString('en-US', { style: 'currency', currency: 'BWP' })}
                   </TableCell>
                 </TableRow>
               ))}
               <TableRow className="font-medium">
                 <TableCell>Total Revenue</TableCell>
                 <TableCell className="text-right">
-                  {totalRevenue.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}
+                  {totalRevenue.toLocaleString('en-US', { style: 'currency', currency: 'BWP' })}
                 </TableCell>
               </TableRow>
             </TableBody>
@@ -112,14 +112,14 @@ function StatementDetails({ statement }: { statement: IncomeStatement }) {
                 <TableRow key={item.id}>
                   <TableCell>{item.description}</TableCell>
                   <TableCell className="text-right">
-                    {item.amount.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}
+                    {item.amount.toLocaleString('en-US', { style: 'currency', currency: 'BWP' })}
                   </TableCell>
                 </TableRow>
               ))}
               <TableRow className="font-medium">
                 <TableCell>Total Expenses</TableCell>
                 <TableCell className="text-right">
-                  {totalExpenses.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}
+                  {totalExpenses.toLocaleString('en-US', { style: 'currency', currency: 'BWP' })}
                 </TableCell>
               </TableRow>
             </TableBody>
@@ -132,7 +132,7 @@ function StatementDetails({ statement }: { statement: IncomeStatement }) {
           <div className="flex justify-between items-center text-lg font-semibold">
             <span>Net Income</span>
             <span className={netIncome >= 0 ? "text-green-600" : "text-red-600"}>
-              {netIncome.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}
+              {netIncome.toLocaleString('en-US', { style: 'currency', currency: 'BWP' })}
             </span>
           </div>
         </CardContent>
@@ -211,13 +211,13 @@ export default function IncomeStatementsPage() {
                       {format(new Date(statement.periodStart), 'MMM yyyy')} - {format(new Date(statement.periodEnd), 'MMM yyyy')}
                     </TableCell>
                     <TableCell className="text-right">
-                      {totalRevenue.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}
+                      {totalRevenue.toLocaleString('en-US', { style: 'currency', currency: 'BWP' })}
                     </TableCell>
                     <TableCell className="text-right">
-                      {totalExpenses.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}
+                      {totalExpenses.toLocaleString('en-US', { style: 'currency', currency: 'BWP' })}
                     </TableCell>
                     <TableCell className={`text-right ${netIncome >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                      {netIncome.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}
+                      {netIncome.toLocaleString('en-US', { style: 'currency', currency: 'BWP' })}
                     </TableCell>
                     <TableCell>
                       <Badge variant="outline" className={statusColors[statement.status]}>
