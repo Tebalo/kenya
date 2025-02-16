@@ -20,21 +20,13 @@ interface Entity {
 }
 
 const entities: Entity[] = [
-  {
-    id: "1",
-    name: "Water Utilities Corporation",
-    code: "wuc"
-  },
-  {
-    id: "2",
-    name: "Botswana Power Corporation",
-    code: "bpc"
-  },
-  {
-    id: "3",
-    name: "Air Botswana",
-    code: "ab"
-  }
+  { id: '1', name: 'Botswana Power Corporation', code: 'bpc' },
+  { id: '2', name: 'Botswana Savings Bank', code: 'bsb' },
+  { id: '3', name: 'Bank of Botswana', code: 'bob' },
+  { id: '4', name: 'Botswana Stock Exchange', code: 'bse' },
+  { id: '5', name: 'National Development Bank', code: 'ndb' },
+  { id: '6', name: 'Botswana Unified Revenue Service', code: 'burs' },
+  { id: '7', name: 'Motor Vehicle Accident Fund', code: 'mvaf' }
 ];
 
 interface EntitySelectorProps {
