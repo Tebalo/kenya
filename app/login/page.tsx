@@ -1,6 +1,6 @@
 import { Metadata } from "next"
 import { Card } from "@/components/ui/card"
-import LoginForm from "@/app/ui/login-form"
+import LoginForm from "@/app/ui/login-formd"
 import PEEPALogo from "../ui/peepa-logo"
 import { Navbar } from "@/components/nav-bar"
 import { Footer } from "@/components/footer"
