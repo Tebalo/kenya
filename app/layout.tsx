@@ -16,6 +16,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Growing The Private Sector",
   description: "PEEPA",
+  icons: {
+    icon: '/botswana_logo.png'
+  }
 };
 
 export default function RootLayout({
